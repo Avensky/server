@@ -1,5 +1,7 @@
 const express = require('express');
 const  app = express();
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 const mongoose = require('mongoose');
 //const user = require('./models/User')
 const keys = require('./config/keys');
@@ -8,6 +10,19 @@ require('./services/passport');
 
 app.use(express.json())
 mongoose.connect(keys.mongoURI);
+
+app.use(
+    cookieSession({
+        maxAge: 30*24*60*60*1000,
+        keys: [keys.cookieKey]
+
+    })
+)
+
+
+app.use(passport.initialize());
+app.use(passport.session())
+
 // let db = mongoose.connection;
 // db.once('open', ()=> {
 //     console.log('Connected to mongoDB');
