@@ -8,7 +8,10 @@ require('./models/Book');
 require('./services/passport');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true,useUnifiedTopology: true });
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true,useUnifiedTopology: true })
+    .then(connect => console.log('connected to mongodb..'))
+    .catch(e => console.log('could not connect to mongodb', e))
+module.exports = {mongoose}
 
 const app = express()
 app.use(express.json())
@@ -19,7 +22,7 @@ app.use(
     })
 )
 
-const db = mongoose.connection;
+let db = mongoose.connection;
 db.on('error', ()=>{
     console.error('Unable to connect MongoDB!')
 });
