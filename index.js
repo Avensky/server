@@ -9,7 +9,15 @@ require('./models/User');
 require('./services/passport');
 
 app.use(express.json())
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true,useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', ()=>{
+    console.error('Unable to connect MongoDB!')
+});
+db.once('open', ()=> {
+    console.log('Connected to mongoDB!');
+});
+require('./routes/bookRoutes')(app);
 
 app.use(
     cookieSession({
