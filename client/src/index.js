@@ -1,13 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import reduxThunk from 'redux-thunk';
+import App from './components/App';
+import reducers from './reducers';
 import * as serviceWorker from './serviceWorker';
 
+// Development only axios helpers!
+import axios from 'axios';
+window.axios = axios;
+
+const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}><App /></Provider>,
   document.getElementById('root')
 );
 

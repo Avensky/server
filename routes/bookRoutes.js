@@ -1,7 +1,7 @@
 const book = require('../models/Book');
 
 module.exports = app => {
-  app.get('/', (req,res) =>{          //get all books info from db
+  app.get('/books', (req,res) =>{          //get all books info from db
     book.find({},(err,doc)=>{
         if(doc)
             res.json({"Available books" : doc});
@@ -58,13 +58,4 @@ module.exports = app => {
         }
     })
   });
-
-  showTimes = () => {
-    let result = ''
-    const times = process.env.TIMES || 5
-    for (i = 0; i < times; i++) {
-      result += i + ' '
-    }
-    return result;
-  }
 }
