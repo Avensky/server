@@ -8,7 +8,7 @@ require('./models/Book');
 require('./services/passport');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true,useUnifiedTopology: true });
 
 const app = express()
 app.use(express.json())
@@ -18,7 +18,6 @@ app.use(
         keys: [keys.cookieKey]
     })
 )
-
 
 const db = mongoose.connection;
 db.on('error', ()=>{
