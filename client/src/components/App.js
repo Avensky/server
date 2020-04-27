@@ -5,7 +5,7 @@ import * as actions from '../actions';
 import logo from '../logo.svg';
 import './App.css';
 
-const Header = () => <h2>header stuff</h2>;
+import Header from './Header';
 const Landing = () => <h2>Landing stuff</h2>;
 const Dashboard = () => <h2>Dashboard stuff</h2>;
 const SurveyNew = () => <h2>SurveyNew stuff</h2>;
@@ -19,6 +19,7 @@ const App = () =>{
     <div className="App">
       <BrowserRouter>
         <div>
+          <Header />
           <Route exact path="/" component={Landing} />
           <Route exact path="/surveys" component={Dashboard} />
           <Route path="/surveys/new" component={SurveyNew} />
