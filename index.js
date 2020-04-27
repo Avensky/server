@@ -1,24 +1,17 @@
 const express = require('express');
-const  app = express();
+const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
-const mongoose = require('mongoose');
-//const user = require('./models/User')
 const keys = require('./config/keys');
 require('./models/User');
+require('./models/Book');
 require('./services/passport');
 
-app.use(express.json())
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true,useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on('error', ()=>{
-    console.error('Unable to connect MongoDB!')
-});
-db.once('open', ()=> {
-    console.log('Connected to mongoDB!');
-});
-require('./routes/bookRoutes')(app);
+mongoose.Promise = global.Promise;
+mongoose.connect(keys.mongoURI);
 
+const app = express()
+app.use(express.json())
 app.use(
     cookieSession({
         maxAge: 30*24*60*60*1000,
@@ -26,8 +19,19 @@ app.use(
     })
 )
 
+
+const db = mongoose.connection;
+db.on('error', ()=>{
+    console.error('Unable to connect MongoDB!')
+});
+db.once('open', ()=> {
+    console.log('Connected to mongoDB!');
+});
+require('./routes/bookRoutes')(app); 
+
 app.use(passport.initialize());
 app.use(passport.session())
+require('./routes/authRoutes')(app);
 
 // let db = mongoose.connection;
 // db.once('open', ()=> {
@@ -87,8 +91,6 @@ app.use(passport.session())
 //         }
 //     })
 // });
-
-require('./routes/authRoutes')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (err) =>{
